@@ -1,0 +1,2 @@
+# CenterCycleTabLayout
+Demo，目的是想TayLayout 选中Tab永远居中且能够无限切换Fragment
