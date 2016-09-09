@@ -19,13 +19,10 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    @Bind(R.id.tabLayout)
-    TabLayout tabLayout;
-    @Bind(R.id.viewPager)
-    ViewPager viewPager;
+    @Bind(R.id.viewPager) ViewPager          viewPager;
+    @Bind(R.id.tabLayout) CenteringTabLayout mTabLayout;
 
     String[] mStrTitle = {"户型D3", "户型D4", "通行", "户型D1", "户型D2"};
-
     List<String> mListTitle = new ArrayList<>();
 
 
@@ -40,35 +37,34 @@ public class MainActivity extends AppCompatActivity {
         if (viewPager != null) {
             setupViewPager(viewPager);
         }
-        tabLayout.setupWithViewPager(viewPager);
+        mTabLayout.setupWithViewPager(viewPager);
         final RelativeLayout tabView = (RelativeLayout) LayoutInflater
                 .from(MainActivity.this)
-                .inflate(R.layout.tabview, tabLayout, false);
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+                .inflate(R.layout.tabview, mTabLayout, false);
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.setCustomView(tabView);
-                int selectedPos = mListTitle.indexOf(tab.getText().toString());
-                viewPager.setCurrentItem(selectedPos);
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            public void onTabUnselected(CenteringTabLayout.Tab tab) {
                 tab.setCustomView(null);
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-                tab.setCustomView(tabView);
+            public void onTabReselected(CenteringTabLayout.Tab tab) {
+
             }
         });
 
-        TabLayout.Tab tabAt = tabLayout.getTabAt(2);
-        if (tabAt != null) {
-            tabAt.select();
-        }
+        mTabLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                viewPager.setCurrentItem(2);//选中5个中间的第3个
+            }
+        }, 10);
 
-        tabLayout.getTabAt(3);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -82,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static class FragmentAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
+        private final List<Fragment> mFragments      = new ArrayList<>();
+        private final List<String>   mFragmentTitles = new ArrayList<>();
 
         public FragmentAdapter(FragmentManager fm) {
             super(fm);
