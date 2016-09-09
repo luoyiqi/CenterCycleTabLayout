@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
@@ -34,9 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        for (int i = 0; i < mStrTitle.length; i++) {
-            mListTitle.add(mStrTitle[i]);
-        }
+        Collections.addAll(mListTitle, mStrTitle);
 
         if (viewPager != null) {
             setupViewPager(viewPager);
@@ -63,13 +62,20 @@ public class MainActivity extends AppCompatActivity {
                 tab.setCustomView(tabView);
             }
         });
-        tabLayout.getTabAt(0).select();
+
+        TabLayout.Tab tabAt = tabLayout.getTabAt(2);
+        if (tabAt != null) {
+            tabAt.select();
+        }
+
+        tabLayout.getTabAt(3);
     }
 
     private void setupViewPager(ViewPager viewPager) {
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
-        for (int i = 0; i < mStrTitle.length; i++) {
-            adapter.addFragment(MyFragment.newInstance(mStrTitle[i]), mStrTitle[i]);
+
+        for (int i = 0; i < mListTitle.size(); i++) {
+            adapter.addFragment(MyFragment.newInstance(mListTitle.get(i)), mListTitle.get(i));
         }
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(adapter.getCount());
